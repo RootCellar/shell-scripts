@@ -26,14 +26,14 @@ function backup() {
 
   log Backing up '"'"$1"'"' to '"'"$2"'"'...
 
-  command_to_print="${RSYNC_BASE} ${RSYNC_OPTIONS[*]} $*"
+  command_to_run="${RSYNC_BASE} ${RSYNC_OPTIONS[@]} $@"
 
   log
-  log "Command: ${command_to_print} "
+  log "Command: ${command_to_run} "
   log "Sync Begin: $(date_and_time) "
   log
 
-  ${RSYNC_BASE} "${RSYNC_OPTIONS[@]}" "$@" >> "${LOG_FILE}" 2>&1 || {
+  ${command_to_run} >> "${LOG_FILE}" 2>&1 || {
     echo "Error encountered during backup. See ${LOG_FILE}"
     return 1
   }
@@ -41,4 +41,3 @@ function backup() {
   log "Sync End: $(date_and_time) "
   return 0
 }
-
